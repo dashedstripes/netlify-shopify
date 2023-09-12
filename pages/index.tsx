@@ -1,16 +1,8 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
 import Layout from '@/components/Layout';
+import { Product } from '@/types';
+import productPrices from '@/utils/product-prices';
+import products from '@/utils/products';
 import { useEffect, useState } from 'react';
-
-const inter = Inter({ subsets: ['latin'] })
-
-type Product = {
-  id: number;
-  name: string;
-  price: number;
-  image: string;
-};
 
 function sleep(seconds: number) {
   return new Promise((resolve) => {
@@ -28,7 +20,7 @@ export default function Home({ products: initialProducts }: { products: Product[
         const updatedProducts = await Promise.all(
           products.map(async (product) => {
             await sleep(2);
-            product.price = 10;
+            product.price = productPrices[product.id];
             return product;
           })
         );
@@ -73,22 +65,7 @@ export default function Home({ products: initialProducts }: { products: Product[
 }
 
 export function getStaticProps() {
-  const products = [
-    {
-      id: 1,
-      name: 'T-shirt',
-      price: 0,
-      image: '/tshirt.jpg',
-    },
-    {
-      id: 2,
-      name: 'Canvas Bag',
-      price: 0,
-      image: '/bag.jpg',
-    },
-  ];
-
-  return {
+   return {
     props: {
       products
     }
